@@ -53,10 +53,10 @@
     <string name="login_register_link">Não tem conta? Cadastre-se</string>
     
     <!-- Register -->
-    <string name="register_title">Criar Conta</string>
+    <string name="register_title">Cadastro</string>
     <string name="register_confirm_password_hint">Confirmar Senha</string>
     <string name="register_button">Cadastrar</string>
-    <string name="register_login_link">Já tem uma conta? Faça login</string>
+    <string name="register_login_link">Já tem conta? Faça login</string>
     
     <!-- Home -->
     <string name="home_title">Minhas Tarefas</string>
@@ -68,13 +68,21 @@
     <string name="task_title_hint">Título da Tarefa</string>
     <string name="task_description_hint">Descrição</string>
     <string name="task_date_hint">Data</string>
-    <string name="task_save_button">Salvar</string>
+    <string name="task_time_hint">Hora</string>
+    <string name="task_save">Salvar</string>
     
     <!-- Profile -->
     <string name="profile_title">Perfil</string>
     <string name="profile_username_hint">Nome de usuário</string>
-    <string name="profile_name_hint">Nome completo</string>
-    <string name="profile_save_button">Salvar Perfil</string>
+    <string name="profile_name_hint">Nome</string>
+    <string name="profile_email_hint">Email</string>
+    <string name="profile_phone_hint">Telefone</string>
+    <string name="profile_camera">Câmera</string>
+    <string name="profile_gallery">Galeria</string>
+    <string name="profile_save">Salvar</string>
+    <string name="profile_logout">Sair</string>
+    <string name="profile_saved">Perfil salvo com sucesso</string>
+    <string name="camera_permission_denied">Permissão da câmera negada</string>
     <string name="profile_photo_title">Alterar foto</string>
     <string-array name="profile_photo_options">
         <item>Escolher da galeria</item>
@@ -97,4 +105,55 @@
 
     <string name="app_name_stylized">TASKS</string>
     <string name="app_logo_description">Logo do aplicativo Tasks</string>
+
+    <!-- Weather -->
+    <string name="weather_error">Não foi possível carregar dados do clima</string>
+    <string name="weather_connection_error">Falha na conexão</string>
+
+    <string name="select_language">Selecione o idioma</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_english">Inglês</string>
+    <string name="language_spanish">Espanhol</string>
+    <string name="apply">Aplicar</string>
+    <string name="language_changed">Idioma alterado. Reiniciando aplicativo...</string>
+
+    <string name="profile_name">Nome</string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_phone">Telefone</string>
+
+    <!-- Adicionar estas strings -->
+    <string name="forgot_password_title">Recuperar Senha</string>
+    <string name="forgot_password_description">Digite seu email e enviaremos um link para redefinir sua senha</string>
+    <string name="forgot_password_button">Enviar Link</string>
+    <string name="email_required">Email é obrigatório</string>
+    <string name="reset_email_sent">Email de redefinição enviado</string>
+    <string name="fill_all_fields">Preencha todos os campos</string>
+    <string name="passwords_dont_match">As senhas não coincidem</string>
+    <string name="registration_success">Cadastro realizado com sucesso</string>
+    <string name="forgot_password_link">Esqueci minha senha</string>
+    <string name="delete_task">Excluir tarefa</string>
+    <string name="no_tasks_message">Você não tem tarefas</string>
+
+    <string name="name_hint">Nome</string>
+
+    <!-- Adicione estas strings -->
+    <string name="task_edit_title">Editar Tarefa</string>
+    <string name="task_new_title">Nova Tarefa</string>
+
+    <!-- Adicione estas strings -->
+    <string name="edit_task">Editar Tarefa</string>
+    <string name="add_task">Adicionar Tarefa</string>
+    <string name="error_empty_title">O título não pode estar vazio</string>
+    <string name="task_added">Tarefa adicionada com sucesso</string>
+    <string name="error_adding_task">Erro ao adicionar tarefa</string>
+    <string name="task_updated">Tarefa atualizada com sucesso</string>
+    <string name="error_updating_task">Erro ao atualizar tarefa</string>
+
+    <!-- Strings que estão faltando -->
+    <string name="profile_image_description">Foto de perfil</string>
+    <string name="profile_save_button">Salvar perfil</string>
+    <string name="task_save_button">Salvar tarefa</string>
+
+    <!-- Adicione esta string -->
+    <string name="back_to_login">Voltar para login</string>
 </resources>

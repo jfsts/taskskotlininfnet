@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Task Manager</string>
+    <string name="app_name_stylized">TASKS</string>
+    <string name="app_logo_description">Tasks app logo</string>
+    
+    <!-- Login -->
+    <string name="login_title">Login</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_register_link">Don\'t have an account? Sign up</string>
+    
+    <!-- Register -->
+    <string name="register_title">Sign Up</string>
+    <string name="register_confirm_password_hint">Confirm Password</string>
+    <string name="register_button">Register</string>
+    <string name="register_login_link">Already have an account? Sign in</string>
+    
+    <!-- Home -->
+    <string name="home_title">My Tasks</string>
+    <string name="home_new_task">New Task</string>
+    <string name="home_no_tasks">No tasks found</string>
+    
+    <!-- Task -->
+    <string name="task_title">Task</string>
+    <string name="task_title_hint">Task Title</string>
+    <string name="task_description_hint">Description</string>
+    <string name="task_date_hint">Date</string>
+    <string name="task_time_hint">Time</string>
+    <string name="task_save_button">Save</string>
+    <string name="task_edit_title">Edit Task</string>
+    <string name="task_new_title">New Task</string>
+    
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_username_hint">Username</string>
+    <string name="profile_name_hint">Name</string>
+    <string name="profile_email_hint">Email</string>
+    <string name="profile_phone_hint">Phone</string>
+    <string name="profile_save_button">Save Profile</string>
+    <string name="profile_photo_title">Change photo</string>
+    <string name="profile_save">Save</string>
+    <string name="profile_saved">Profile saved successfully</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_phone">Phone</string>
+    
+    <string name="profile_gallery">Gallery</string>
+    <string name="profile_logout">Logout</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="profile_image_description">User profile photo</string>
+    
+    <!-- Common -->
+    <string name="logout">Logout</string>
+    <string name="theme_toggle">Toggle Theme</string>
+    
+    <!-- Weather -->
+    <string name="weather_error">Error getting weather</string>
+    <string name="weather_connection_error">Connection failed</string>
+    
+    <!-- Language -->
+    <string name="select_language">Select language</string>
+    <string name="language_portuguese">Portuguese</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="apply">Apply</string>
+    <string name="language_changed">Language changed. Restarting app...</string>
+    
+    <!-- Forgot Password -->
+    <string name="forgot_password_title">Reset Password</string>
+    <string name="forgot_password_description">Enter your email and we will send you a link to reset your password</string>
+    <string name="forgot_password_button">Send Link</string>
+    <string name="email_required">Email is required</string>
+    <string name="reset_email_sent">Reset email sent</string>
+    <string name="fill_all_fields">Please fill all fields</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="registration_success">Registration successful</string>
+    <string name="forgot_password_link">Forgot password</string>
+    <string name="name_hint">Name</string>
+    
+    <!-- Strings for task editing -->
+    <string name="edit_task">Edit Task</string>
+    <string name="add_task">Add Task</string>
+    <string name="error_empty_title">Title cannot be empty</string>
+    <string name="task_added">Task added successfully</string>
+    <string name="error_adding_task">Error adding task</string>
+    <string name="task_updated">Task updated successfully</string>
+    <string name="error_updating_task">Error updating task</string>
+    <string name="task_save">Save</string>
+    <string name="back_to_login">Back to login</string>
+</resources> 

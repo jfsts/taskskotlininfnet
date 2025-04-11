@@ -15,10 +15,12 @@ data class Task(
     val title: String,
     val description: String,
     val date: String,
+    val time: String = "",
     val status: TaskStatus = TaskStatus.PENDING
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -30,13 +32,17 @@ data class Task(
         parcel.writeString(title)
         parcel.writeString(description)
         parcel.writeString(date)
+        parcel.writeString(time)
         parcel.writeInt(status.ordinal)
     }
 
     override fun describeContents(): Int = 0
 
-    companion object CREATOR : Parcelable.Creator<Task> {
-        override fun createFromParcel(parcel: Parcel): Task = Task(parcel)
-        override fun newArray(size: Int): Array<Task?> = arrayOfNulls(size)
+    companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<Task> {
+            override fun createFromParcel(parcel: Parcel): Task = Task(parcel)
+            override fun newArray(size: Int): Array<Task?> = arrayOfNulls(size)
+        }
     }
 } 

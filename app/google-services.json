@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941211881377",
+    "project_id": "appkotlin-f3efb",
+    "storage_bucket": "appkotlin-f3efb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941211881377:android:605f6a32b5c7699ae385e0",
+        "android_client_info": {
+          "package_name": "com.example.taskmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrUR_NSOL8vsmSoK25hXdVvBFS1yBZ4iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

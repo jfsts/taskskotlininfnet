@@ -1,4 +1,4 @@
-package com.example.taskmanager
+package com.example.taskmanager.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.taskmanager.R
 import com.example.taskmanager.model.Task
 
 class TaskAdapter(
@@ -29,17 +30,14 @@ class TaskAdapter(
     }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Modificar para usar os IDs corretos do seu layout
-        private val textTaskTitle: TextView = itemView.findViewById(R.id.textTaskTitle)
-        private val textTaskDate: TextView = itemView.findViewById(R.id.textTaskDate)
+        private val textTitle: TextView = itemView.findViewById(R.id.textTaskTitle)
+        private val textDate: TextView = itemView.findViewById(R.id.textTaskDate)
         private val checkboxComplete: CheckBox = itemView.findViewById(R.id.checkboxComplete)
         private val buttonDelete: ImageButton = itemView.findViewById(R.id.buttonDelete)
 
         fun bind(task: Task) {
-            textTaskTitle.text = task.title
-            // Se você tiver um campo de descrição no layout, use-o; caso contrário, remova esta linha
-            // textTaskDescription.text = task.description
-            textTaskDate.text = "${task.date} ${task.time}"
+            textTitle.text = task.title
+            textDate.text = "${task.date} ${task.time}"
             checkboxComplete.isChecked = task.completed
 
             itemView.setOnClickListener { onTaskClick(task) }

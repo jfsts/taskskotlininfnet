@@ -2,68 +2,105 @@ package com.example.taskmanager
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import android.view.View
+import android.widget.Toast
 import com.example.taskmanager.databinding.ActivityLoginBinding
-import android.view.animation.AnimationUtils
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import android.widget.EditText
+import android.util.Log
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        try {
+            Log.d("LoginActivity", "onCreate iniciado")
+            super.onCreate(savedInstanceState)
+            binding = ActivityLoginBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            Log.d("LoginActivity", "Layout inflado")
 
-        // Removendo setSupportActionBar
-        
-        // Inicia as animações
-        startAnimations()
-
-        binding.buttonLogin.setOnClickListener {
-            Log.d("LoginActivity", "Clicou em Login")
-            if (validateForm()) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+            // Inicializar Firebase Auth
+            try {
+                auth = FirebaseAuth.getInstance()
+                Log.d("LoginActivity", "Firebase Auth inicializado")
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Erro ao inicializar Firebase Auth: ${e.message}")
+                e.printStackTrace()
+                // Continue sem Firebase para testes
             }
-        }
 
-        binding.textRegister.setOnClickListener {
-            Log.d("LoginActivity", "Clicou em Registrar")
-            startActivity(Intent(this, RegisterActivity::class.java))
+            // Botão de login
+            binding.buttonLogin.setOnClickListener {
+                val emailFragment = supportFragmentManager.findFragmentById(R.id.emailFragment)
+                val passwordFragment = supportFragmentManager.findFragmentById(R.id.passwordFragment)
+                
+                val email = emailFragment?.view?.findViewById<EditText>(R.id.editEmail)?.text.toString() ?: ""
+                val password = passwordFragment?.view?.findViewById<EditText>(R.id.editPassword)?.text.toString() ?: ""
+
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    loginUser(email, password)
+                } else {
+                    Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // Link para tela de registro
+            binding.textRegister.setOnClickListener {
+                startActivity(Intent(this, RegisterActivity::class.java))
+            }
+
+            // Link para recuperação de senha
+            binding.textForgotPassword.setOnClickListener {
+                val intent = Intent(this, ForgotPasswordActivity::class.java)
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Log.e("LoginActivity", "Erro crítico no onCreate: ${e.message}")
+            e.printStackTrace()
+            Toast.makeText(this, "Erro ao iniciar aplicativo", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
-    private fun startAnimations() {
-        val fadeSlideUp = AnimationUtils.loadAnimation(this, R.anim.fade_slide_up)
-        val fadeSlideDown = AnimationUtils.loadAnimation(this, R.anim.fade_slide_down)
-        
-        binding.imageLogo.startAnimation(fadeSlideDown)
-        binding.textTitle.startAnimation(fadeSlideDown)
-        binding.layoutForm.startAnimation(fadeSlideUp)
+    private fun loginUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                binding.progressBar.visibility = View.GONE
+                if (task.isSuccessful) {
+                    // Login bem-sucedido
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // Login falhou
+                    Toast.makeText(baseContext, "Falha na autenticação: ${task.exception?.message}", 
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
     }
 
-    private fun validateForm(): Boolean {
-        var isValid = true
-        val errorColor = ContextCompat.getColor(this, R.color.env_error)
-        
-        val email = binding.editEmail.text.toString()
-        val password = binding.editPassword.text.toString()
-        val minPasswordLength = resources.getString(R.string.env_min_password_length).toInt()
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.editEmail.error = "E-mail inválido"
-            binding.editEmail.setTextColor(errorColor)
-            isValid = false
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            // Ir para a tela principal
+            val intent = Intent(this, HomeActivity::class.java)
+            // Limpe a pilha de atividades para que o usuário não possa voltar 
+            // para a tela de login pressionando o botão voltar
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
+    }
 
-        if (password.isEmpty() || password.length < minPasswordLength) {
-            binding.editPassword.error = "Senha deve ter pelo menos $minPasswordLength caracteres"
-            binding.editPassword.setTextColor(errorColor)
-            isValid = false
+    override fun onStart() {
+        super.onStart()
+        // Verificar se o usuário já está logado
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            updateUI(currentUser)
         }
-
-        return isValid
     }
 } 

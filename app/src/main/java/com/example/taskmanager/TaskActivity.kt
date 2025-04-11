@@ -1,106 +1,146 @@
 package com.example.taskmanager
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
-import android.os.Parcelable
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import android.widget.Toast
 import com.example.taskmanager.databinding.ActivityTaskBinding
+import com.example.taskmanager.data.TaskDao
+import com.example.taskmanager.model.Task
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
-class TaskActivity : AppCompatActivity() {
+class TaskActivity : BaseActivity() {
     private lateinit var binding: ActivityTaskBinding
+    private lateinit var taskDao: TaskDao
+    private var taskId: String? = null
+    private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar()
-        setupDatePicker()
-        setupSaveButton()
-        
-        // Carrega a tarefa se estiver editando
-        intent.parcelable<Task>("task")?.let { task ->
-            binding.editTitle.setText(task.title)
-            binding.editDescription.setText(task.description)
-            binding.editDate.setText(task.date)
-        }
-    }
-
-    private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener {
-            finish()
+        
+        // Inicializar o TaskDao
+        taskDao = TaskDao()
+
+        // Verificar se estamos editando uma tarefa existente
+        taskId = intent.getStringExtra("TASK_ID")
+        isEditMode = !taskId.isNullOrEmpty()
+        
+        if (isEditMode) {
+            supportActionBar?.title = getString(R.string.edit_task)
+            // Preencher os campos com os dados da tarefa
+            binding.editTitle.setText(intent.getStringExtra("TASK_TITLE") ?: "")
+            binding.editDescription.setText(intent.getStringExtra("TASK_DESCRIPTION") ?: "")
+            binding.editDate.setText(intent.getStringExtra("TASK_DATE") ?: "")
+            binding.editTime.setText(intent.getStringExtra("TASK_TIME") ?: "")
+        } else {
+            supportActionBar?.title = getString(R.string.add_task)
         }
+
+        setupDatePicker()
+        setupTimePicker()
+        setupSaveButton()
     }
 
     private fun setupDatePicker() {
-        val dateFormat = SimpleDateFormat(
-            resources.getString(R.string.env_date_format), 
-            Locale.getDefault()
-        )
-
         binding.editDate.setOnClickListener {
             val calendar = Calendar.getInstance()
             
-            DatePickerDialog(
+            val datePickerDialog = DatePickerDialog(
                 this,
-                { _, year, month, day ->
-                    calendar.set(year, month, day)
-                    binding.editDate.setText(dateFormat.format(calendar.time))
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = Calendar.getInstance()
+                    selectedDate.set(year, month, dayOfMonth)
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    binding.editDate.setText(dateFormat.format(selectedDate.time))
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            )
+            
+            datePickerDialog.show()
+        }
+    }
+
+    private fun setupTimePicker() {
+        binding.editTime.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            
+            val timePickerDialog = TimePickerDialog(
+                this,
+                { _, hourOfDay, minute ->
+                    val selectedTime = String.format("%02d:%02d", hourOfDay, minute)
+                    binding.editTime.setText(selectedTime)
+                },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+            )
+            
+            timePickerDialog.show()
         }
     }
 
     private fun setupSaveButton() {
-        binding.fabSave.setOnClickListener {
-            if (validateForm()) {
-                // Aqui será implementada a lógica de salvar
-                setResult(RESULT_OK)
-                finish()
+        binding.buttonSave.setOnClickListener {
+            val title = binding.editTitle.text.toString().trim()
+            val description = binding.editDescription.text.toString().trim()
+            val date = binding.editDate.text.toString().trim()
+            val time = binding.editTime.text.toString().trim()
+            
+            if (title.isEmpty()) {
+                binding.editTitle.error = getString(R.string.error_empty_title)
+                return@setOnClickListener
+            }
+            
+            val task = Task(
+                id = taskId ?: "",
+                title = title,
+                description = description,
+                date = date,
+                time = time,
+                completed = false
+            )
+            
+            if (isEditMode) {
+                updateTask(task)
+            } else {
+                createTask(task)
             }
         }
     }
 
-    private fun validateForm(): Boolean {
-        var isValid = true
-        val maxTitleLength = resources.getString(R.string.env_max_task_title_length).toInt()
-
-        val title = binding.editTitle.text.toString()
-        if (title.isEmpty()) {
-            binding.editTitle.error = "Título é obrigatório"
-            isValid = false
-        } else if (title.length > maxTitleLength) {
-            binding.editTitle.error = "Título não pode ter mais que $maxTitleLength caracteres"
-            isValid = false
+    private fun createTask(task: Task) {
+        taskDao.addTask(task) { success, errorMessage ->
+            if (success) {
+                Toast.makeText(this, getString(R.string.task_added), Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, getString(R.string.error_adding_task) + ": $errorMessage", Toast.LENGTH_SHORT).show()
+            }
         }
-
-        val date = binding.editDate.text.toString()
-        if (date.isEmpty()) {
-            binding.editDate.error = "Data é obrigatória"
-            isValid = false
-        }
-
-        return isValid
     }
-}
 
-// Função de extensão para simplificar a obtenção de Parcelables
-inline fun <reified T : Parcelable> android.content.Intent.parcelable(key: String): T? {
-    return when {
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU -> {
-            getParcelableExtra(key, T::class.java)
+    private fun updateTask(task: Task) {
+        taskDao.updateTask(task) { success, errorMessage ->
+            if (success) {
+                Toast.makeText(this, getString(R.string.task_updated), Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, getString(R.string.error_updating_task) + ": $errorMessage", Toast.LENGTH_SHORT).show()
+            }
         }
-        else -> {
-            @Suppress("DEPRECATION")
-            getParcelableExtra(key) as? T
-        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 } 

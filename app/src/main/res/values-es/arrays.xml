@@ -1,0 +1,6 @@
+<resources>
+    <string-array name="profile_photo_options">
+        <item>Elegir de la galería</item>
+        <item>Tomar foto</item>
+    </string-array>
+</resources> 
